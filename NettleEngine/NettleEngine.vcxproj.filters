@@ -44,5 +44,8 @@
     <ClInclude Include="Engine\platforms.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -21,7 +21,9 @@ namespace Nettle {
 	}
 	void Core::MainLoop()
 	{
-
+		system->BeginLoop(isFocused);
+		game->Update();
+		system->EndLoop(isFocused);
 	}
 	void Core::Destroy()
 	{

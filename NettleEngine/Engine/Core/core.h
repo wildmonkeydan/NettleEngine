@@ -18,5 +18,6 @@ namespace Nettle {
 
 		Game* game = nullptr;
 		System::System* system = nullptr;
+		bool isFocused = true;
 	};
 }
