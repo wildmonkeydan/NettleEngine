@@ -1,9 +1,13 @@
 #pragma once
 
 #ifdef PLATFORM_PSX
-#include "psxgte.h"
-#endif // PLATFORM_PSX
+#include "libpsn00b/psxgte.h"
+#endif
 
+#ifdef PLATFORM_DESKTOP
+#include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
+#endif
 
 namespace Nettle {
 
@@ -62,6 +66,10 @@ namespace Nettle {
 		}
 
 		// Conversion
+
+
+
+		// Platform specific
 #ifdef PLATFORM_PSX
 		operator DVECTOR() const {
 			DVECTOR out;
@@ -69,7 +77,15 @@ namespace Nettle {
 			out.vy = this->y;
 			return out;
 		}
-#endif // PLATFORM_PSX
+#endif
+#ifdef PLATFORM_DESKTOP
+		operator glm::i32vec2() const {
+			return glm::i32vec2(this->x, this->y);
+		}
+		operator glm::vec2() const {
+			return glm::vec2(this->x, this->y);
+		}
+#endif // PLATFORM_DESKTOP
 
 
 		int x = 0, y = 0;
