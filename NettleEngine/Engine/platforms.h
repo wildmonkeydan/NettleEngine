@@ -7,7 +7,6 @@
 #ifdef PLATFORM_DESKTOP
 
 #include "System/desktop.h"
-
 using HostOS = Nettle::System::Desktop;
 
 #elif PLATFORM_PSX

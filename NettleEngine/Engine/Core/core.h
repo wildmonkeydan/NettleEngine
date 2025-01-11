@@ -1,6 +1,18 @@
 #pragma once
 #include "game.h"
+#include "../types.h"
 #include "../System/system.h"
+
+//======================================
+//
+// NETTLE ENGINE - core.h
+// 
+// Main singelton for the engine
+// 
+// This code is under the MIT license
+// Daniel Turner - 2025
+//
+//======================================
 
 namespace Nettle {
 	class Core {

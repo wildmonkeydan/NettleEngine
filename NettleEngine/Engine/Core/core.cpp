@@ -27,6 +27,6 @@ namespace Nettle {
 	}
 	void Core::Destroy()
 	{
-
+		system->Destroy();
 	}
 }

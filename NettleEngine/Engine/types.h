@@ -1,5 +1,16 @@
 #pragma once
 
+//======================================
+//
+// NETTLE ENGINE - types.h
+// 
+// Types for use throughout the engine
+// 
+// This code is under the MIT license
+// Daniel Turner - 2025
+//
+//======================================
+
 #ifdef PLATFORM_PSX
 #include "libpsn00b/psxgte.h"
 #include "libpsn00b/psxgpu.h"
@@ -383,5 +394,23 @@ namespace Nettle {
 		}
 
 		unsigned char r = 127, g = 127, b = 127;
+	};
+
+	///
+	///
+	/// Container Types
+	/// 
+	/// 
+	
+	template <typename T>
+	class vector {
+	public:
+		vector() { }
+		int push_back(T value) {
+			size;
+		}
+	private:
+		T* base;
+		unsigned int size;
 	};
 }

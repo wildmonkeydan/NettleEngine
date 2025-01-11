@@ -8,16 +8,20 @@ namespace Nettle {
         {
             glfwInit();
             glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-
+            prevTime = glfwGetTime();
             return true;
         }
         bool Desktop::BeginLoop(bool isFocused)
         {
-            return false;
+            prevTime = glfwGetTime();
+            return true;
         }
-        float Desktop::EndLoop(bool isFocused)
+        Fixed Desktop::EndLoop(bool isFocused)
         {
-            return 0.0f;
+            double deltaTime = glfwGetTime() - prevTime;
+            unsigned int fixedDelta = deltaTime * (1 << FIXED_STEP);
+
+            return Fixed(fixedDelta);
         }
         void Desktop::Destroy()
         {

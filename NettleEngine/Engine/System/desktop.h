@@ -8,8 +8,10 @@ namespace Nettle {
 		public:
 			bool Init() override;
 			bool BeginLoop(bool isFocused) override;
-			float EndLoop(bool isFocused) override;
+			Fixed EndLoop(bool isFocused) override;
 			void Destroy() override;
+		private:
+			double prevTime = 0.f;
 		};
 	}
 }
