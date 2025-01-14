@@ -77,10 +77,10 @@
     <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Engine;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Engine;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -122,10 +122,11 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>PLATFORM_PSX;PLATFORM_DESKTOP;GLFW_INCLUDE_VULKAN;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PLATFORM_PSX;PLATFORM_DESKTOP;GLFW_INCLUDE_VULKAN;_CRT_SECURE_NO_WARNINGS_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(PSN00BSDK_LIBS)\..\..\include\;$(VULKAN_SDK)\Include;..\..\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -140,10 +141,11 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>PLATFORM_PSX;PLATFORM_DESKTOP;GLFW_INCLUDE_VULKAN;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PLATFORM_PSX;PLATFORM_DESKTOP;GLFW_INCLUDE_VULKAN;_CRT_SECURE_NO_WARNINGSNDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(PSN00BSDK_LIBS)\..\..\include\;$(VULKAN_SDK)\Include;..\..\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -155,20 +157,36 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Engine\System\desktop.cpp" />
+    <ClCompile Include="Engine\Render\Platforms\voodoo.cpp" />
+    <ClCompile Include="Engine\System\File\standard.cpp" />
+    <ClCompile Include="Engine\System\Platforms\desktop.cpp" />
     <ClCompile Include="Engine\Core\core.cpp" />
-    <ClCompile Include="Engine\System\file.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\platforms.h" />
-    <ClInclude Include="Engine\System\desktop.h" />
+    <ClInclude Include="Engine\Render\Platforms\voodoo.h" />
+    <ClInclude Include="Engine\System\File\standard.h" />
+    <ClInclude Include="Engine\System\Platforms\desktop.h" />
     <ClInclude Include="Engine\Core\core.h" />
     <ClInclude Include="Engine\Core\game.h" />
     <ClInclude Include="Engine\System\system.h" />
+    <ClInclude Include="Engine\TINYSTL\allocator.h" />
+    <ClInclude Include="Engine\TINYSTL\buffer.h" />
+    <ClInclude Include="Engine\TINYSTL\hash.h" />
+    <ClInclude Include="Engine\TINYSTL\hash_base.h" />
+    <ClInclude Include="Engine\TINYSTL\new.h" />
+    <ClInclude Include="Engine\TINYSTL\stddef.h" />
+    <ClInclude Include="Engine\TINYSTL\string.h" />
+    <ClInclude Include="Engine\TINYSTL\string_view.h" />
+    <ClInclude Include="Engine\TINYSTL\traits.h" />
+    <ClInclude Include="Engine\TINYSTL\unordered_map.h" />
+    <ClInclude Include="Engine\TINYSTL\unordered_set.h" />
+    <ClInclude Include="Engine\TINYSTL\vector.h" />
     <ClInclude Include="Engine\types.h" />
     <ClInclude Include="Engine\System\file.h" />
     <ClInclude Include="nettle.h" />
+    <ClInclude Include="Engine\Render\painter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

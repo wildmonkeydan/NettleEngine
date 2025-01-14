@@ -1,6 +1,7 @@
 #pragma once
 #include "game.h"
 #include "../System/system.h"
+#include "../Render/painter.h"
 
 //======================================
 //
@@ -21,7 +22,7 @@ namespace Nettle {
 
 		void Run(Game* pgame);
 	private:
-		Core();
+		Core() { };
 
 		void Init();
 		void MainLoop();
@@ -29,6 +30,7 @@ namespace Nettle {
 
 		Game* game = nullptr;
 		System::System* system = nullptr;
+		Render::Painter* painter = nullptr;
 		bool isFocused = true;
 	};
 }

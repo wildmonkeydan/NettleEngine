@@ -21,10 +21,13 @@
     <ClCompile Include="Engine\Core\core.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\System\desktop.cpp">
+    <ClCompile Include="Engine\System\Platforms\desktop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\System\file.cpp">
+    <ClCompile Include="Engine\System\File\standard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\Platforms\voodoo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,7 +44,7 @@
     <ClInclude Include="Engine\System\system.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\System\desktop.h">
+    <ClInclude Include="Engine\System\Platforms\desktop.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine\platforms.h">
@@ -51,6 +54,51 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine\System\file.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\TINYSTL\allocator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\TINYSTL\buffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\TINYSTL\hash.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\TINYSTL\hash_base.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\TINYSTL\new.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\TINYSTL\stddef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\TINYSTL\string.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\TINYSTL\string_view.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\TINYSTL\traits.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\TINYSTL\unordered_map.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\TINYSTL\unordered_set.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\TINYSTL\vector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\System\File\standard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\painter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\Platforms\voodoo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

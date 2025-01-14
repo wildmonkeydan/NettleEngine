@@ -1,3 +1,4 @@
+///
 ///		Nettle Engine - Daniel Turner 2024
 /// 
 ///		main.cpp
@@ -5,16 +6,19 @@
 /// 
 /// 
 ///		This engine is under MIT licence
+///
 
-#include <GLFW/glfw3.h>
+#include "nettle.h"
 
-#include <glm/vec4.hpp>
-#include <glm/mat4x4.hpp>
-
-#include <iostream>
+class Test : public Nettle::Game {
+    bool Start() override { return true; };
+    void Update() override {};
+    void Render() override {};
+    void End() override {};
+};
 
 int main() {
-    glfwInit();
+    /*glfwInit();
 
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
     GLFWwindow* window = glfwCreateWindow(800, 600, "Vulkan window", nullptr, nullptr);
@@ -36,6 +40,10 @@ int main() {
 
     glfwTerminate();
 
+*/
+    Test test;
+
+    Nettle::Core::GetCore().Run(&test);
 
 	return 0;
 }

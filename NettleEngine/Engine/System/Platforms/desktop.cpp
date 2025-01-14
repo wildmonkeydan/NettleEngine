@@ -9,13 +9,13 @@ namespace Nettle {
         bool Desktop::Init()
         {
             glfwInit();
-            glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
             prevTime = glfwGetTime();
             return true;
         }
         bool Desktop::BeginLoop(bool isFocused)
         {
             prevTime = glfwGetTime();
+            glfwPollEvents();
             return true;
         }
         Fixed Desktop::EndLoop(bool isFocused)

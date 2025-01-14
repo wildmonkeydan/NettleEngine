@@ -396,15 +396,15 @@ namespace Nettle {
 		unsigned char r = 127, g = 127, b = 127;
 	};
 
-	///
-	///
-	/// TINYSTL includes | TINYSTL - Copyright 2012-2018 Matthew Endsley
-	/// 
-	/// 
-	
+}
+
+///
+///
+/// TINYSTL includes | TINYSTL - Copyright 2012-2018 Matthew Endsley
+/// 
+/// 
+
 #include "TINYSTL/stddef.h"
 #include "TINYSTL/string.h"
 #include "TINYSTL/vector.h"
 #include "TINYSTL/unordered_map.h"
-
-}

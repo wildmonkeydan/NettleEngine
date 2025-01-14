@@ -18,15 +18,22 @@ namespace Nettle {
 	{
 		system = new System::HostOS;
 		system->Init();
+		painter = new Render::HostPainter;
+		painter->Init("Nettle Engine");
 	}
 	void Core::MainLoop()
 	{
-		system->BeginLoop(isFocused);
-		game->Update();
-		system->EndLoop(isFocused);
+		while (painter->Begin())
+		{
+			game->Update();
+			painter->End();
+			system->EndLoop(isFocused);
+			system->BeginLoop(isFocused);
+		}
 	}
 	void Core::Destroy()
 	{
+		painter->Destroy();
 		system->Destroy();
 	}
 }

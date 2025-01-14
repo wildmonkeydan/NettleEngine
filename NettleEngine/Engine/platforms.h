@@ -8,10 +8,15 @@
 
 #include "System/Platforms/desktop.h"
 #include "System/File/standard.h"
+#include "Render/Platforms/voodoo.h"
+
 namespace Nettle {
 	namespace System {
 		using HostOS = Desktop;
 		using File = FileStandard;
+	}
+	namespace Render {
+		using HostPainter = Voodoo;
 	}
 }
 
