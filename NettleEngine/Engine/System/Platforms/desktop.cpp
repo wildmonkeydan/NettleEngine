@@ -1,3 +1,5 @@
+#ifdef PLATFORM_DESKTOP
+
 #include "desktop.h"
 
 #include <GLFW/glfw3.h>
@@ -29,3 +31,5 @@ namespace Nettle {
         }
     }
 }
+
+#endif // PLATFORM_DESKTOP

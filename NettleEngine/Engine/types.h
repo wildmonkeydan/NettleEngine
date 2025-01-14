@@ -398,19 +398,13 @@ namespace Nettle {
 
 	///
 	///
-	/// Container Types
+	/// TINYSTL includes | TINYSTL - Copyright 2012-2018 Matthew Endsley
 	/// 
 	/// 
 	
-	template <typename T>
-	class vector {
-	public:
-		vector() { }
-		int push_back(T value) {
-			size;
-		}
-	private:
-		T* base;
-		unsigned int size;
-	};
+#include "TINYSTL/stddef.h"
+#include "TINYSTL/string.h"
+#include "TINYSTL/vector.h"
+#include "TINYSTL/unordered_map.h"
+
 }

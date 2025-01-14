@@ -6,8 +6,14 @@
 
 #ifdef PLATFORM_DESKTOP
 
-#include "System/desktop.h"
-using HostOS = Nettle::System::Desktop;
+#include "System/Platforms/desktop.h"
+#include "System/File/standard.h"
+namespace Nettle {
+	namespace System {
+		using HostOS = Desktop;
+		using File = FileStandard;
+	}
+}
 
 #elif PLATFORM_PSX
 

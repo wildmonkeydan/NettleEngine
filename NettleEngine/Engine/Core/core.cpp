@@ -16,7 +16,7 @@ namespace Nettle {
 	}
 	void Core::Init()
 	{
-		system = new HostOS;
+		system = new System::HostOS;
 		system->Init();
 	}
 	void Core::MainLoop()
