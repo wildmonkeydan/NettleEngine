@@ -35,5 +35,8 @@ namespace Nettle {
 	{
 		painter->Destroy();
 		system->Destroy();
+
+		delete painter;
+		delete system;
 	}
 }
