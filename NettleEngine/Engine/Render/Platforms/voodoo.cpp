@@ -1,5 +1,8 @@
 #include "voodoo.h"
 
+#include <limits>
+#include <algorithm>
+
 namespace Nettle {
     namespace Render {
         bool Voodoo::Init(tinystl::string gameName)
@@ -19,13 +22,15 @@ namespace Nettle {
             glfwWindowHint(GLFW_REFRESH_RATE, videoMode->refreshRate);
 
             window = glfwCreateWindow(videoMode->width, videoMode->height, gameName.c_str(), NULL, nullptr);
-            glfwSetWindowMonitor(window, mon, 0, 0, videoMode->width, videoMode->height, GLFW_DONT_CARE);
+            //glfwSetWindowMonitor(window, mon, 0, 0, videoMode->width, videoMode->height, GLFW_DONT_CARE);
 
             //
             // Vulkan setup
             //
 
+
             vkEnumerateInstanceExtensionProperties(nullptr, &vulkanExtensionCount, nullptr);
+
 
             // Create instance
 
@@ -46,6 +51,7 @@ namespace Nettle {
 
             glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
+
             createInfo.enabledExtensionCount = glfwExtensionCount;
             createInfo.ppEnabledExtensionNames = glfwExtensions;
             createInfo.enabledLayerCount = 0;
@@ -57,16 +63,22 @@ namespace Nettle {
 
             glfwCreateWindowSurface(instance, window, nullptr, &surface);
 
+
+
+
+
+
             // Create device
 
+            VkPhysicalDevice dummyDevice{};
             uint32_t deviceCount = 0;
             vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
             
             if (deviceCount > 0) {
-                pdevices.reserve(deviceCount);
+                pdevices.assign(deviceCount, dummyDevice);
                 vkEnumeratePhysicalDevices(instance, &deviceCount, pdevices.data());
 
-                for (int i = 0; i < pdevices.size(); i++) {
+                for (int i = 0; i < pdevices.capacity(); i++) {
                     VkPhysicalDeviceProperties deviceProperties;
                     vkGetPhysicalDeviceProperties(pdevices[i], &deviceProperties);
 
@@ -96,6 +108,9 @@ namespace Nettle {
 
 
 
+
+
+
             VkDeviceQueueCreateInfo queueCreateInfo[2];
             float queuePriority = 1.f;
 
@@ -112,11 +127,15 @@ namespace Nettle {
 
             VkPhysicalDeviceFeatures deviceFeatures{};
 
+            deviceExtensions.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+
             VkDeviceCreateInfo deviceCreateInfo{};
             deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
             deviceCreateInfo.pQueueCreateInfos = queueCreateInfo;
             deviceCreateInfo.queueCreateInfoCount = 2;
             deviceCreateInfo.pEnabledFeatures = &deviceFeatures;
+            deviceCreateInfo.enabledExtensionCount = deviceExtensions.size();
+            deviceCreateInfo.ppEnabledExtensionNames = deviceExtensions.data();
 
             result = vkCreateDevice(pdevices[deviceInUse], &deviceCreateInfo, nullptr, &device);
 
@@ -124,6 +143,99 @@ namespace Nettle {
             // Get queues
             vkGetDeviceQueue(device, graphicsFamily, 0, &graphicsQueue);
             vkGetDeviceQueue(device, presentFamily, 0, &presentQueue);
+
+
+
+
+
+            // Create swap chain
+
+            vkGetPhysicalDeviceSurfaceCapabilitiesKHR(pdevices[deviceInUse], surface, &scInfo.capabilities);
+
+            unsigned int formatCount;
+            vkGetPhysicalDeviceSurfaceFormatsKHR(pdevices[deviceInUse], surface, &formatCount, nullptr);
+
+            if (formatCount != 0) {
+                scInfo.formats.resize(formatCount);
+                vkGetPhysicalDeviceSurfaceFormatsKHR(pdevices[deviceInUse], surface, &formatCount, scInfo.formats.data());
+            }
+
+            unsigned int presentModeCount;
+            vkGetPhysicalDeviceSurfacePresentModesKHR(pdevices[deviceInUse], surface, &presentModeCount, nullptr);
+
+            if (presentModeCount != 0) {
+                scInfo.presentModes.resize(presentModeCount);
+                vkGetPhysicalDeviceSurfacePresentModesKHR(pdevices[deviceInUse], surface, &presentModeCount, scInfo.presentModes.data());
+            }
+
+            const VkSurfaceFormatKHR* pickedFormat = nullptr;
+            VkPresentModeKHR pickedPresentMode = VK_PRESENT_MODE_FIFO_KHR;
+
+            if (!scInfo.formats.empty() && !scInfo.presentModes.empty()) {
+
+                // Find the ideal format if it exists
+                for (const VkSurfaceFormatKHR& format : scInfo.formats) {
+                    if (format.format == VK_FORMAT_B8G8R8A8_SRGB && format.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
+                        pickedFormat = &format;
+                    }
+                }
+
+                if (!pickedFormat)
+                    pickedFormat = &scInfo.formats[0];
+
+                // Find mailbox if it exsists
+                for (const VkPresentModeKHR& presentMode : scInfo.presentModes) {
+                    if (presentMode == VK_PRESENT_MODE_MAILBOX_KHR)
+                        pickedPresentMode = presentMode;
+                }
+            }
+
+            VkExtent2D swapExtent;
+            if (scInfo.capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
+                swapExtent = scInfo.capabilities.currentExtent;
+            }
+            else {
+                int width, height;
+                glfwGetFramebufferSize(window, &width, &height);
+
+                swapExtent.width = std::clamp(swapExtent.width, scInfo.capabilities.minImageExtent.width, scInfo.capabilities.maxImageExtent.width);
+                swapExtent.height = std::clamp(swapExtent.height, scInfo.capabilities.minImageExtent.height, scInfo.capabilities.maxImageExtent.height);
+            }
+            
+            unsigned int imageCount = scInfo.capabilities.minImageCount + 1;
+            if (scInfo.capabilities.maxImageCount > 0 && imageCount > scInfo.capabilities.maxImageCount) {
+                imageCount = scInfo.capabilities.maxImageCount;
+            }
+
+            VkSwapchainCreateInfoKHR scCreateInfo{};
+            scCreateInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+            scCreateInfo.surface = surface;
+            scCreateInfo.minImageCount = imageCount;
+            scCreateInfo.imageFormat = pickedFormat->format;
+            scCreateInfo.imageColorSpace = pickedFormat->colorSpace;
+            scCreateInfo.imageExtent = swapExtent;
+            scCreateInfo.imageArrayLayers = 1;
+            scCreateInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+
+            unsigned int queueFamilyIndices[] = { graphicsFamily, presentFamily };
+
+            if (graphicsFamily != presentFamily) {
+                scCreateInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
+                scCreateInfo.queueFamilyIndexCount = 2;
+                scCreateInfo.pQueueFamilyIndices = queueFamilyIndices;
+            }
+            else {
+                scCreateInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+            }
+
+            scCreateInfo.preTransform = scInfo.capabilities.currentTransform;
+            scCreateInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+            scCreateInfo.presentMode = pickedPresentMode;
+            scCreateInfo.clipped = VK_TRUE;
+            scCreateInfo.oldSwapchain = VK_NULL_HANDLE;
+
+            vkCreateSwapchainKHR(device, &scCreateInfo, nullptr, &swapChain);
+
 
 
             return true;
@@ -137,6 +249,7 @@ namespace Nettle {
         }
         void Voodoo::Destroy()
         {
+            vkDestroySwapchainKHR(device, swapChain, nullptr);
             vkDestroySurfaceKHR(instance, surface, nullptr);
             vkDestroyInstance(instance, nullptr);
             vkDestroyDevice(device, nullptr);

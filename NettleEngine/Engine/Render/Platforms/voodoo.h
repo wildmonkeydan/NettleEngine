@@ -1,6 +1,7 @@
 #pragma once
 #include "../painter.h"
 #include "types.h"
+#include <vector>
 #include <GLFW/glfw3.h>
 
 namespace Nettle {
@@ -8,6 +9,12 @@ namespace Nettle {
 		class Voodoo : public Painter
 		{
 		public:
+			struct SwapChainInfo {
+				VkSurfaceCapabilitiesKHR capabilities;
+				tinystl::vector<VkSurfaceFormatKHR> formats;
+				tinystl::vector<VkPresentModeKHR> presentModes;
+			};
+
 			bool Init(tinystl::string gameName) override;
 			bool Begin() override;
 			void End() override;
@@ -18,7 +25,7 @@ namespace Nettle {
 			// Vulkan
 			VkInstance instance;
 
-			tinystl::vector<VkPhysicalDevice> pdevices;
+			std::vector<VkPhysicalDevice> pdevices;
 			VkDevice device;
 			int deviceInUse = 0;
 
@@ -29,8 +36,12 @@ namespace Nettle {
 			VkQueue graphicsQueue;
 			VkQueue presentQueue;
 
+			VkSwapchainKHR swapChain;
+			SwapChainInfo scInfo;
+
 			VkSurfaceKHR surface;
 
+			tinystl::vector<const char*> deviceExtensions;
 			unsigned int vulkanExtensionCount = 0;
 		};
 	}
