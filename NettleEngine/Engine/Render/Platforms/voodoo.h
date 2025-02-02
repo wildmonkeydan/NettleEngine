@@ -29,7 +29,7 @@ namespace Nettle {
 			VkDevice device;
 			int deviceInUse = 0;
 
-			tinystl::vector<VkQueueFamilyProperties> queueFamilies;
+			std::vector<VkQueueFamilyProperties> queueFamilies;
 			int graphicsFamily = 0;
 			int presentFamily = 0;
 
@@ -37,11 +37,15 @@ namespace Nettle {
 			VkQueue presentQueue;
 
 			VkSwapchainKHR swapChain;
+			std::vector<VkImage> swapChainImages;
+			VkFormat swapChainFormat;
+			VkExtent2D swapChainExtent;
+			std::vector<VkImageView> swapChainImageViews;
 			SwapChainInfo scInfo;
 
 			VkSurfaceKHR surface;
 
-			tinystl::vector<const char*> deviceExtensions;
+			std::vector<const char*> deviceExtensions;
 			unsigned int vulkanExtensionCount = 0;
 		};
 	}

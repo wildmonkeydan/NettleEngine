@@ -75,7 +75,7 @@ namespace Nettle {
             vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
             
             if (deviceCount > 0) {
-                pdevices.assign(deviceCount, dummyDevice);
+                pdevices.resize(deviceCount);
                 vkEnumeratePhysicalDevices(instance, &deviceCount, pdevices.data());
 
                 for (int i = 0; i < pdevices.capacity(); i++) {
@@ -93,7 +93,7 @@ namespace Nettle {
             uint32_t queueFamilyCount = 0;
             vkGetPhysicalDeviceQueueFamilyProperties(pdevices[deviceInUse], &queueFamilyCount, nullptr);
 
-            queueFamilies.reserve(queueFamilyCount);
+            queueFamilies.resize(queueFamilyCount);
             vkGetPhysicalDeviceQueueFamilyProperties(pdevices[deviceInUse], &queueFamilyCount, queueFamilies.data());
 
             for (int i = 0; i < queueFamilies.size(); i++) {
@@ -111,8 +111,9 @@ namespace Nettle {
 
 
 
-            VkDeviceQueueCreateInfo queueCreateInfo[2];
+            VkDeviceQueueCreateInfo queueCreateInfo[2]{};
             float queuePriority = 1.f;
+            float queuePriorityP = 0.5f;
 
             // Graphics queue
             queueCreateInfo[0].sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
@@ -123,7 +124,7 @@ namespace Nettle {
             queueCreateInfo[1].sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
             queueCreateInfo[1].queueFamilyIndex = presentFamily;
             queueCreateInfo[1].queueCount = 1;
-            queueCreateInfo[1].pQueuePriorities = &queuePriority;
+            queueCreateInfo[1].pQueuePriorities = &queuePriorityP;
 
             VkPhysicalDeviceFeatures deviceFeatures{};
 
@@ -133,6 +134,7 @@ namespace Nettle {
             deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
             deviceCreateInfo.pQueueCreateInfos = queueCreateInfo;
             deviceCreateInfo.queueCreateInfoCount = 2;
+            deviceCreateInfo.enabledLayerCount = 0;
             deviceCreateInfo.pEnabledFeatures = &deviceFeatures;
             deviceCreateInfo.enabledExtensionCount = deviceExtensions.size();
             deviceCreateInfo.ppEnabledExtensionNames = deviceExtensions.data();
@@ -234,7 +236,42 @@ namespace Nettle {
             scCreateInfo.clipped = VK_TRUE;
             scCreateInfo.oldSwapchain = VK_NULL_HANDLE;
 
-            vkCreateSwapchainKHR(device, &scCreateInfo, nullptr, &swapChain);
+            result = vkCreateSwapchainKHR(device, &scCreateInfo, nullptr, &swapChain);
+
+            unsigned int numImages;
+
+            vkGetSwapchainImagesKHR(device, swapChain, &numImages, nullptr);
+            swapChainImages.resize(numImages);
+            vkGetSwapchainImagesKHR(device, swapChain, &numImages, swapChainImages.data());
+
+            swapChainExtent = swapExtent;
+            swapChainFormat = pickedFormat->format;
+
+
+            // Create Image Views
+
+            swapChainImageViews.resize(numImages);
+
+            for (int i = 0; i < swapChainImageViews.size(); i++) {
+                VkImageViewCreateInfo imgCreateInfo{};
+                imgCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+                imgCreateInfo.image = swapChainImages[i];
+                imgCreateInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+                imgCreateInfo.format = swapChainFormat;
+
+                imgCreateInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+                imgCreateInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+                imgCreateInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+                imgCreateInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+
+                imgCreateInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+                imgCreateInfo.subresourceRange.baseMipLevel = 0;
+                imgCreateInfo.subresourceRange.levelCount = 1;
+                imgCreateInfo.subresourceRange.baseArrayLayer = 0;
+                imgCreateInfo.subresourceRange.layerCount = 1;
+
+                vkCreateImageView(device, &imgCreateInfo, nullptr, &swapChainImageViews[i]);
+            }
 
 
 
@@ -249,6 +286,10 @@ namespace Nettle {
         }
         void Voodoo::Destroy()
         {
+            for (VkImageView& view : swapChainImageViews) {
+                vkDestroyImageView(device, view, nullptr);
+            }
+
             vkDestroySwapchainKHR(device, swapChain, nullptr);
             vkDestroySurfaceKHR(instance, surface, nullptr);
             vkDestroyInstance(instance, nullptr);
