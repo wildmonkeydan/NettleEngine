@@ -15,11 +15,22 @@ namespace Nettle {
 				tinystl::vector<VkPresentModeKHR> presentModes;
 			};
 
+			struct Shader {
+				Shader(tinystl::string vertFile, tinystl::string fragFile, Voodoo* painter);
+				void Destroy(Voodoo* painter);
+
+				VkShaderModule vert;
+				VkShaderModule frag;
+			};
+
 			bool Init(tinystl::string gameName) override;
 			bool Begin() override;
 			void End() override;
 			void Destroy() override;
 		private:
+			void SetupGraphicsPipeline();
+			VkShaderModule CreateShaderModule(const std::vector<char>& code);
+
 			GLFWwindow* window = nullptr;
 
 			// Vulkan
@@ -44,6 +55,8 @@ namespace Nettle {
 			SwapChainInfo scInfo;
 
 			VkSurfaceKHR surface;
+
+			Shader* mainShader;
 
 			std::vector<const char*> deviceExtensions;
 			unsigned int vulkanExtensionCount = 0;

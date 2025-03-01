@@ -188,6 +188,10 @@
     <ClInclude Include="nettle.h" />
     <ClInclude Include="Engine\Render\painter.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Engine\Render\Shaders\TestFragShader.frag" />
+    <None Include="Engine\Render\Shaders\TestVertShader.vert" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -2,9 +2,40 @@
 
 #include <limits>
 #include <algorithm>
+#include <fstream>
 
 namespace Nettle {
     namespace Render {
+        static std::vector<char> readFile(const tinystl::string& filename) {
+            std::ifstream file(filename.c_str(), std::ios::ate | std::ios::binary);
+
+            if (!file.is_open()) {
+                throw std::runtime_error("failed to open file!");
+            }
+
+            size_t fileSize = (size_t)file.tellg();
+            std::vector<char> buffer(fileSize);
+            file.seekg(0);
+            file.read(buffer.data(), fileSize);
+            file.close();
+
+            return buffer;
+        }
+
+        VkShaderModule Voodoo::CreateShaderModule(const std::vector<char>& code) {
+            VkShaderModuleCreateInfo createInfo{};
+            createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+            createInfo.codeSize = code.size();
+            createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
+
+            VkShaderModule shaderModule;
+            if (vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
+                throw std::runtime_error("failed to create shader module!");
+            }
+
+            return shaderModule;
+        }
+
         bool Voodoo::Init(tinystl::string gameName)
         {   
             //
@@ -273,19 +304,30 @@ namespace Nettle {
                 vkCreateImageView(device, &imgCreateInfo, nullptr, &swapChainImageViews[i]);
             }
 
-
+            SetupGraphicsPipeline();
 
             return true;
         }
+
+        void Voodoo::SetupGraphicsPipeline()
+        {
+            mainShader = new Shader("vert.spv", "frag.spv", this);
+        }
+
         bool Voodoo::Begin()
         {
             return !glfwWindowShouldClose(window);
         }
+
         void Voodoo::End()
         {
         }
+
         void Voodoo::Destroy()
         {
+            mainShader->Destroy(this);
+            delete mainShader;
+
             for (VkImageView& view : swapChainImageViews) {
                 vkDestroyImageView(device, view, nullptr);
             }
@@ -295,6 +337,17 @@ namespace Nettle {
             vkDestroyInstance(instance, nullptr);
             vkDestroyDevice(device, nullptr);
             glfwDestroyWindow(window);
+        }
+
+        Voodoo::Shader::Shader(tinystl::string vertFile, tinystl::string fragFile, Voodoo* painter)
+        {
+            vert = painter->CreateShaderModule(readFile(vertFile));
+            frag = painter->CreateShaderModule(readFile(fragFile));
+        }
+        void Voodoo::Shader::Destroy(Voodoo* painter)
+        {
+            vkDestroyShaderModule(painter->device, vert, nullptr);
+            vkDestroyShaderModule(painter->device, frag, nullptr);
         }
     }
 }

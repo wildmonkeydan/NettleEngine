@@ -102,4 +102,8 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Engine\Render\Shaders\TestVertShader.vert" />
+    <None Include="Engine\Render\Shaders\TestFragShader.frag" />
+  </ItemGroup>
 </Project>
