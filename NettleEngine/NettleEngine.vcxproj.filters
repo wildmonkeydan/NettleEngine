@@ -30,6 +30,9 @@
     <ClCompile Include="Engine\Render\Platforms\voodoo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Render\Platforms\glad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="nettle.h">
@@ -101,9 +104,11 @@
     <ClInclude Include="Engine\Render\Platforms\voodoo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Engine\Render\Shaders\TestVertShader.vert" />
-    <None Include="Engine\Render\Shaders\TestFragShader.frag" />
+    <ClInclude Include="Engine\Render\Platforms\glad\glad.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\Platforms\KHR\khrplatform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -26,6 +26,7 @@ namespace Nettle {
 		while (painter->Begin())
 		{
 			game->Update();
+			game->Render();
 			painter->End();
 			system->EndLoop(isFocused);
 			system->BeginLoop(isFocused);

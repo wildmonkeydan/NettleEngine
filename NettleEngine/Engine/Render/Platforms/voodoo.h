@@ -2,6 +2,7 @@
 #include "../painter.h"
 #include "types.h"
 #include <vector>
+#include "glad/glad.h"
 #include <GLFW/glfw3.h>
 
 namespace Nettle {
@@ -9,10 +10,10 @@ namespace Nettle {
 		class Voodoo : public Painter
 		{
 		public:
-			struct SwapChainInfo {
-			};
-
-			struct Shader {
+			struct Framebuffer {
+				unsigned int fboId = 0;
+				unsigned int colourId = 0;
+				unsigned int depthId = 0;
 			};
 
 			bool Init(tinystl::string gameName) override;
@@ -23,6 +24,9 @@ namespace Nettle {
 			void SetupGraphicsPipeline();
 
 			GLFWwindow* window = nullptr;
+
+			unsigned int fragmentShader, vertexShader, shaderProgram, VBO, VAO;
+			Framebuffer framebuffer{};
 		};
 	}
 }

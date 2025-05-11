@@ -157,6 +157,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Render\Platforms\glad.c" />
     <ClCompile Include="Engine\Render\Platforms\voodoo.cpp" />
     <ClCompile Include="Engine\System\File\standard.cpp" />
     <ClCompile Include="Engine\System\Platforms\desktop.cpp" />
@@ -165,6 +166,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\platforms.h" />
+    <ClInclude Include="Engine\Render\Platforms\glad\glad.h" />
+    <ClInclude Include="Engine\Render\Platforms\KHR\khrplatform.h" />
     <ClInclude Include="Engine\Render\Platforms\voodoo.h" />
     <ClInclude Include="Engine\System\File\standard.h" />
     <ClInclude Include="Engine\System\Platforms\desktop.h" />
@@ -187,10 +190,6 @@
     <ClInclude Include="Engine\System\file.h" />
     <ClInclude Include="nettle.h" />
     <ClInclude Include="Engine\Render\painter.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Engine\Render\Shaders\TestFragShader.frag" />
-    <None Include="Engine\Render\Shaders\TestVertShader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -10,7 +10,7 @@ namespace Nettle {
 			virtual bool Begin() = 0;
 			virtual void End() = 0;
 			virtual void Destroy() = 0;
-		private:
+		protected:
 			Color background;
 		};
 	}
