@@ -1,5 +1,5 @@
 #pragma once
-#include "../painter.h"
+#include "../../painter.h"
 #include "types.h"
 #include <vector>
 #include "glad/glad.h"
@@ -18,15 +18,18 @@ namespace Nettle {
 
 			bool Init(tinystl::string gameName) override;
 			bool Begin() override;
+			void AddSprite(Sprite sprt) override;
 			void End() override;
 			void Destroy() override;
 		private:
 			void SetupGraphicsPipeline();
+			void SetupGameScreen();
 
 			GLFWwindow* window = nullptr;
 
 			unsigned int fragmentShader, vertexShader, shaderProgram, VBO, VAO;
 			Framebuffer framebuffer{};
+			std::vector<Sprite> sprites;
 		};
 	}
 }

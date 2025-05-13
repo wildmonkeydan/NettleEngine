@@ -8,7 +8,7 @@
 
 #include "System/Platforms/desktop.h"
 #include "System/File/standard.h"
-#include "Render/Platforms/voodoo.h"
+#include "Render/Platforms/Voodoo/voodoo.h"
 
 namespace Nettle {
 	namespace System {

@@ -35,8 +35,9 @@ namespace Nettle {
             glfwGetWindowSize(window, &w, &h);
             glViewport(0, 0, w, h);
 
-
+            //
             // Setup framebuffer
+            //
             glGenFramebuffers(1, &framebuffer.fboId);
             glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.fboId);
 
@@ -58,6 +59,10 @@ namespace Nettle {
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, framebuffer.fboId, 0);
             glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_FRAMEBUFFER, framebuffer.depthId);
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
+
+
 
             // Tests
             const char* vertexShaderSource = "#version 330 core\n"
@@ -112,11 +117,27 @@ namespace Nettle {
             glBindVertexArray(0);
         }
 
+        void Voodoo::SetupGameScreen()
+        {
+            int width, height;
+            glfwGetWindowSize(window, &width, &height);
+
+            float ratio = ((float)width / (float)height) * 3;
+            float gap = (ratio - 4.f) / 2;
+
+            float verts[18];
+        }
+
         bool Voodoo::Begin()
         {
             glClearColor((float)((float)background.r/255.f), (float)((float)background.g / 255.f), (float)((float)background.b / 255.f), 1.f);
             glClear(GL_COLOR_BUFFER_BIT);
             return !glfwWindowShouldClose(window);
+        }
+
+        void Voodoo::AddSprite(Sprite sprt)
+        {
+            sprites.push_back(sprt);
         }
 
         void Voodoo::End()
